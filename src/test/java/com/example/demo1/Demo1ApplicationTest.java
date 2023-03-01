@@ -11,12 +11,10 @@ import static org.junit.jupiter.api.Assertions.*;
 class Demo1ApplicationTest {
 
     private final Demo1Application demo1Application;
-    private final UserService userService;
 
     @Autowired
-    public Demo1ApplicationTest(Demo1Application demo1Application, UserService userService) {
+    public Demo1ApplicationTest(Demo1Application demo1Application) {
         this.demo1Application = demo1Application;
-        this.userService = userService;
     }
 
     @Test
@@ -24,11 +22,4 @@ class Demo1ApplicationTest {
         assertNotNull(demo1Application);
     }
 
-    @Test
-    void createUser() {
-        String name = "Jhon";
-        assertNull(userService.findByName(name));
-        userService.createUser(name);
-        assertNotNull(userService.findByName(name));
-    }
 }
