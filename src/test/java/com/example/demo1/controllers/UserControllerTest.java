@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -48,13 +49,12 @@ class UserControllerTest {
     @Test
     void createUser() throws Exception {
         String name = "Jhon";
-        User user = new User(name);
 
-        Mockito.when(userRepository.save(Mockito.any())).thenReturn(user);
+        Mockito.when(userRepository.save(Mockito.any())).thenReturn(new User(name));
 
         mockMvc.perform(post("/users/?name=" + name))
                 .andDo(print())
-                .andExpect(content().string(containsString("\"name\":\"" + name + "\"")))
+                .andExpect(jsonPath("$.name").value(name))
                 .andExpect(status().isOk());
 
     }
@@ -64,15 +64,12 @@ class UserControllerTest {
         String name = "Jhon";
         String newName = "Alex";
 
-        User user = new User(name);
-        User newUser = new User(newName);
+        Mockito.when(userRepository.save(Mockito.any())).thenReturn(new User(newName));
+        Mockito.when(userRepository.findByName(Mockito.any())).thenReturn(new User(name));
 
-        Mockito.when(userRepository.save(Mockito.any())).thenReturn(newUser);
-        Mockito.when(userRepository.findByName(Mockito.any())).thenReturn(user);
-
-        mockMvc.perform(put("/users/{id}?name={newName}",user.getId(), newName))
+        mockMvc.perform(put("/users/{id}?name={newName}",1, newName))
                 .andDo(print())
-                .andExpect(content().string(containsString("\"name\":\"" + newName + "\"")))
+                .andExpect(jsonPath("$.name").value(newName))
                 .andExpect(status().isOk());
     }
 
