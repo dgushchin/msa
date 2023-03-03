@@ -12,6 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -58,7 +59,7 @@ class UserServiceTest {
         String name = "Jhon";
         String newName = "Alex";
 
-        Mockito.when(userRepository.findByName(Mockito.any())).thenReturn(new User(name));
+        Mockito.when(userRepository.findById(Mockito.any())).thenReturn(Optional.of(new User(name)));
         Mockito.when(userRepository.save(Mockito.any())).thenReturn(new User(newName));
 
         User editUser = userService.editUser(1,newName);

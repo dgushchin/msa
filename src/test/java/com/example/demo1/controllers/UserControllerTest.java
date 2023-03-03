@@ -7,15 +7,14 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -65,7 +64,7 @@ class UserControllerTest {
         String newName = "Alex";
 
         Mockito.when(userRepository.save(Mockito.any())).thenReturn(new User(newName));
-        Mockito.when(userRepository.findByName(Mockito.any())).thenReturn(new User(name));
+        Mockito.when(userRepository.findById(Mockito.any())).thenReturn(Optional.of(new User(name)));
 
         mockMvc.perform(put("/users/{id}?name={newName}",1, newName))
                 .andDo(print())
