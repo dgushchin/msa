@@ -1,7 +1,7 @@
 package com.example.demo1.controllers;
 
 
-import com.example.demo1.dto.Greeting;
+import com.example.demo1.dto.GreetingMessage;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.concurrent.atomic.AtomicLong;
@@ -13,8 +13,11 @@ public class MainController {
     private final AtomicLong counter = new AtomicLong();
 
     @GetMapping("/greeting")
-    public Greeting getGreeting(@RequestParam(value = "name",defaultValue = "World") String name){
-        return new Greeting(counter.incrementAndGet(),String.format(template, name));
+    public GreetingMessage getGreeting(@RequestParam(value = "name",defaultValue = "World") String name){
+        GreetingMessage greetingMessage = new GreetingMessage();
+        greetingMessage.setId(counter.incrementAndGet());
+        greetingMessage.setMessage(String.format(template, name));
+        return greetingMessage;
     }
 
 
